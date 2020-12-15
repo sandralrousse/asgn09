@@ -1,6 +1,6 @@
 <?php
 
-function convert_to_imperialgallons($value, $from_unit) {
+function convert_to_imperialgallon($value, $from_unit) {
   switch($from_unit) {
     case 'Bucket':
       return $value * 4;
@@ -15,7 +15,7 @@ function convert_to_imperialgallons($value, $from_unit) {
       return $value * 54;
       break;
     case 'Imperial Gallon':
-      return $value * 1; 
+      return $value; 
       break;
     case 'Pint':
       return $value * 0.125;
@@ -25,7 +25,7 @@ function convert_to_imperialgallons($value, $from_unit) {
   }
 }
   
-function convert_from_imperialgallons($value, $to_unit) {
+function convert_from_imperialgallon($value, $to_unit) {
   switch($to_unit) {
     case 'Bucket':
       return $value / 4;
@@ -40,7 +40,7 @@ function convert_from_imperialgallons($value, $to_unit) {
       return $value / 54;
       break;
     case 'Imperial Gallon':
-      return $value / 1;
+      return $value;
       break;
     case 'Pint':
       return $value / 0.125;
@@ -50,10 +50,10 @@ function convert_from_imperialgallons($value, $to_unit) {
   }
 }
 
-function convert_imperialgallons($value, $from_unit, $to_unit) {
-  $imperialgallon_value = convert_to_imperialgallons($value, $from_unit);
-  $new_value = convert_from_imperialgallons($meter_value, $to_unit);
-  return $new_value;
+function convert_liquids($value, $from_unit, $to_unit){
+	$imperialgallon_value = convert_to_imperialgallon ($value, $from_unit);
+	$new_value = convert_from_imperialgallon ($imperialgallon_value, $to_unit);
+	return $new_value;
 }
 
 $from_value = '';
@@ -61,8 +61,12 @@ $from_unit = '';
 $to_unit = '';
 $to_value = '';
 
-if(!isset($_POST['submit'])) {
-  $_POST['submit'] = '';
+if($_POST['submit']) {
+  $from_value = $_POST['from_value'];
+	$from_unit = $_POST['from_unit'];
+	$to_unit = $_POST['to_unit'];	
+	
+	$to_value = convert_liquids($from_value, $from_unit, $to_unit);
 }
 
 ?>
@@ -83,7 +87,7 @@ if(!isset($_POST['submit'])) {
         
         <div class="entry">
           <label>From:</label>&nbsp;
-          <input type="text" name="from_value" value="<?php echo $from_value; ?>" />&nbsp;
+          <input type="text" name="fromValue" value="<?php echo $from_value; ?>" />&nbsp;
           <select name="from_unit">
             <option value="buckets"<?php if($from_unit == 'buckets') { echo " selected"; } ?>>Buckets</option>
             <option value="butt"<?php if($from_unit == 'butt') { echo " selected"; } ?>>Butt</option>
@@ -96,7 +100,7 @@ if(!isset($_POST['submit'])) {
         
         <div class="entry">
           <label>To:</label>&nbsp;
-          <input type="text" name="to_value" value="<?php echo $to_value; ?>"/>&nbsp;
+          <input type="text" name="toValue" value="<?php echo $to_value; ?>"/>&nbsp;
           <select name="to_unit">
           <option value="buckets"<?php if($to_unit == 'buckets') { echo " selected"; } ?>>Buckets</option>
             <option value="butt"<?php if($to_unit == 'butt') { echo " selected"; } ?>>Butt</option>
